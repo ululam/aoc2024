@@ -43,37 +43,28 @@ def solve(matrix: Array[ArrayBuffer[Char]]): Int = {
   }
 
   val target = "XMAS"
-  for (i <- matrix.indices) {
-    for (j <- matrix(i).indices) {
-      if (matrix(i)(j) == target.charAt(0)) {
-        for (move <- moves) {
-          bt(target.substring(1), (i, j), move)
-        }
-      }
+  matrix.indices.foreach(i => matrix(i).indices.foreach(j => 
+    if (matrix(i)(j) == target.charAt(0)) {
+      moves.foreach(move => bt(target.substring(1), (i, j), move))
     }
-  }
+  ))
   counter
 }
 
 def solve2(matrix: Array[ArrayBuffer[Char]]): Int = {
   val possibleXCorners = Set("MSSM", "SMMS", "SSMM", "MMSS")
-  def isX_Mas(pos: (Int, Int)): Boolean = {
-
+  def isX_Mas(pos: (Int, Int)): Int = {
     val (r, c) = pos
-    if (r > matrix.length - 3) return false
-    if (c > matrix(0).length - 3) return false
-    if (matrix(r+1)(c+1) != 'A') return false
+    if (r > matrix.length - 3) return 0
+    if (c > matrix(0).length - 3) return 0
+    if (matrix(r+1)(c+1) != 'A') return 0
     val corners = "" + matrix(r)(c) + matrix(r+2)(c) + matrix(r+2)(c+2) + matrix(r)(c+2)
-    possibleXCorners.contains(corners)
+    if (!possibleXCorners.contains(corners)) return 0
+    1
   }
 
-  var counter = 0
-  for (i <- matrix.indices) {
-    for (j <- matrix(i).indices) {
-      if (isX_Mas((i,j))) {
-        counter += 1
-      }
-    }
-  }
-  counter
+  matrix.indices
+    .map(i => matrix(i).indices.map(j => isX_Mas(i,j)))
+    .map(row => row.sum)
+    .sum
 }
