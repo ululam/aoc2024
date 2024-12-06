@@ -53,6 +53,7 @@ def solve(matrix: Array[ArrayBuffer[Char]]): Int = {
 
 def solve2(matrix: Array[ArrayBuffer[Char]]): Int = {
   val possibleXCorners = Set("MSSM", "SMMS", "SSMM", "MMSS")
+  
   def isX_Mas(pos: (Int, Int)): Int = {
     val (r, c) = pos
     if (r > matrix.length - 3) return 0
